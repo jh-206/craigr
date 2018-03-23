@@ -5,6 +5,8 @@
 #' @param query The URL specifying the query
 #' @param type What type of thing you want to look up on craiglist.  Currently
 #' only apartment searches are available.  Default is \code{apa} for "apartment".
+#' @param get_address Logical specifying whether to extract address from posting.
+#' Requires reading html of post URL. Default is \code{FALSE}
 #'
 #' @return
 #'
@@ -12,7 +14,7 @@
 #' @keywords internal
 #' @export
 #'
-get_query <- function(query, type = "apa")
+get_query <- function(query, type = "apa", get_address = F)
 {
   ## The raw query
   raw_query <- xml2::read_html(query)
@@ -23,7 +25,7 @@ get_query <- function(query, type = "apa")
   ## Create data vectors
   create_vector(env = environment(),
                 c("titles", "prices", "dates", "urls", "locales", "beds",
-                  "sqfts"))
+                  "sqfts", "addresses"))
 
 
   ## Loop through to make sure no data is missing
@@ -39,10 +41,10 @@ get_query <- function(query, type = "apa")
     ## Post price (returns NA if an error is generated)
     price <- na_error({
       post %>%
-      rvest::html_node("span.result-price") %>%
-      rvest::html_text() %>%
-      stringr::str_extract("[0-9]+") %>%
-      as.numeric()
+        rvest::html_node("span.result-price") %>%
+        rvest::html_text() %>%
+        stringr::str_extract("[0-9]+") %>%
+        as.numeric()
     })
 
     ## Post date
@@ -58,30 +60,39 @@ get_query <- function(query, type = "apa")
     ## Approx location (returns NA if an error is generated)
     locale <- na_error({
       post %>%
-      rvest::html_node(".result-hood") %>%
-      rvest::html_text()
+        rvest::html_node(".result-hood") %>%
+        rvest::html_text()
     })
 
     ## Post bedrooms and sqft (returns NA if an error is generated)
     size <- na_error({
       post %>%
-      rvest::html_node(".housing") %>%
-      rvest::html_text()
+        rvest::html_node(".housing") %>%
+        rvest::html_text()
     })
 
     # Obtain num bedrooms (returns NA if an error is generated)
     bed <- na_error({
       size %>%
-      stringr::str_extract("[0-9]*br") %>%
-      stringr::str_replace("br", "")
+        stringr::str_extract("[0-9]*br") %>%
+        stringr::str_replace("br", "")
     })
 
     # Obtain square footage (returns NA if an error is generated)
     sqft <- na_error({
       size %>%
-      stringr::str_extract("[0-9]*ft") %>%
-      stringr::str_replace("ft", "")
+        stringr::str_extract("[0-9]*ft") %>%
+        stringr::str_replace("ft", "")
     })
+    # Obtain Address if specified in function args (returns NA if an error is generated)
+    if(get_address){
+      address <- na_error({
+        link <- xml2::read_html(url)
+        link %>% rvest::html_node(".mapaddress") %>% rvest::html_text() %>%
+          gsub("^\\s+|\\s+$", "", .) %>% ifelse(. == "(google map)", NA, .)
+      })
+      addresses <- c(addresses, address)
+    }
 
     ## Populate data vectors
     titles  <- c(titles,  title)
@@ -105,6 +116,10 @@ get_query <- function(query, type = "apa")
                            SqFt     = sqfts,
                            Location = locales,
                            URL      = urls)
+
+  if(get_address) {
+    clean_data$Address <- addresses
+  }
 
   return(clean_data)
 }

@@ -51,7 +51,7 @@ rentals <- function(location = "seattle", area = "all", base_url = NULL,
                     search_distance = NULL, bedrooms = NULL, bathrooms = NULL,
                     min_price = NULL, max_price = NULL, min_sqft = NULL,
                     max_sqft = NULL, has_pic = FALSE, posted_today = FALSE,
-                    pets_cat = FALSE, pets_dog = FALSE)
+                    pets_cat = FALSE, pets_dog = FALSE, ...)
 {
   ## Preliminary input checks -----
   # Generate the base url based on specified location and area and make sure
@@ -153,7 +153,7 @@ rentals <- function(location = "seattle", area = "all", base_url = NULL,
   {
     if(i == 0){
       ## Nothing is appended to the URL for the first page
-      all_results <- get_query(query_url)
+      all_results <- get_query(query_url, ...)
     } else {
       ## Add page number
       if(length(queries) > 1){
@@ -165,7 +165,7 @@ rentals <- function(location = "seattle", area = "all", base_url = NULL,
       }
 
       ## Get the results from the current page
-      query_results <- get_query(query_page)
+      query_results <- get_query(query_page, ...)
 
       ## Bind the results from each page
       all_results <- rbind(all_results, query_results)
