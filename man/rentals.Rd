@@ -9,7 +9,7 @@ rentals(location = "seattle", area = "all", base_url = NULL,
   postal = NULL, search_distance = NULL, bedrooms = NULL,
   bathrooms = NULL, min_price = NULL, max_price = NULL, min_sqft = NULL,
   max_sqft = NULL, has_pic = FALSE, posted_today = FALSE,
-  pets_cat = FALSE, pets_dog = FALSE)
+  pets_cat = FALSE, pets_dog = FALSE, ...)
 }
 \arguments{
 \item{location}{Character vector containing the region to look in. Matches
@@ -65,6 +65,8 @@ is \code{FALSE}.}
 
 \item{pets_dog}{Logical specifying whether apartment must allow dogs. Default
 is \code{FALSE}.}
+
+\item{...}{Additional arguments.}
 }
 \description{
 Get a list of housing available on craiglist using your own

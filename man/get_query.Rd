@@ -4,13 +4,16 @@
 \alias{get_query}
 \title{get_query}
 \usage{
-get_query(query, type = "apa")
+get_query(query, type = "apa", get_address = F)
 }
 \arguments{
 \item{query}{The URL specifying the query}
 
 \item{type}{What type of thing you want to look up on craiglist.  Currently
 only apartment searches are available.  Default is \code{apa} for "apartment".}
+
+\item{get_address}{Logical specifying whether to extract address from posting.
+Requires reading html of post URL. Default is \code{FALSE}}
 }
 \value{
 
