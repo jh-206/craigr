@@ -38,6 +38,7 @@
 #' is \code{FALSE}.
 #' @param pets_dog Logical specifying whether apartment must allow dogs. Default
 #' is \code{FALSE}.
+#' @param ... Additional arguments.
 #'
 #' @examples
 #'
