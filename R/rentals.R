@@ -141,10 +141,6 @@ rentals <- function(location = "seattle", area = "all", base_url = NULL,
 
   # How many results are available?
   tot_results <- get_num_results(query_url)
-  if(tot_results == 0){
-    message(paste0("No search results found at ", query_url,". Please check your input."))
-    return(NA)
-  }
   # Use user specified max results if it is less than the num. available results
   if(max_results < tot_results){
     tot_results <- max_results
