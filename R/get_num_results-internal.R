@@ -21,7 +21,6 @@ get_num_results <- function(query)
     extract(1) %>%
     rvest::html_text() %>%
     as.numeric()
-  if(length(tot_results) == 0) tot_results = 0
 
   return(tot_results)
 }
