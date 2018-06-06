@@ -22,9 +22,9 @@
 #' @param search_distance Optional numeric supplying a distance from the
 #' specified postal code.
 #' @param postal Optional numeric postal code specifying an area to search in.
-#' @param bedrooms Optional character vector specifying the desired number of
+#' @param bedrooms Optional numeric vector specifying the desired number of
 #' bedrooms.
-#' @param bathrooms Optional character vector specifying the desired number of
+#' @param bathrooms Optional numeric vector specifying the desired number of
 #' bathrooms.
 #' @param min_price Optional numeric containing minimum price.
 #' @param max_price Optional numeric containing maximum price.
@@ -38,6 +38,7 @@
 #' is \code{FALSE}.
 #' @param pets_dog Logical specifying whether apartment must allow dogs. Default
 #' is \code{FALSE}.
+#' @param housing_type Character vector specifying housing type for search results. Includes house, apartment, condo. See craigslist for full list of housing types.
 #' @param ... Additional arguments.
 #'
 #' @examples
@@ -52,7 +53,7 @@ rentals <- function(location = "seattle", area = "all", base_url = NULL,
                     search_distance = NULL, bedrooms = NULL, bathrooms = NULL,
                     min_price = NULL, max_price = NULL, min_sqft = NULL,
                     max_sqft = NULL, has_pic = FALSE, posted_today = FALSE,
-                    pets_cat = FALSE, pets_dog = FALSE, ...)
+                    pets_cat = FALSE, pets_dog = FALSE, housing_type = NULL, ...)
 {
   ## Preliminary input checks -----
   # Generate the base url based on specified location and area and make sure
@@ -126,6 +127,26 @@ rentals <- function(location = "seattle", area = "all", base_url = NULL,
   }
   if(pets_dog){
     queries <- c(queries, "pets_dog=1")
+  }
+  if(!(missing(housing_type))){
+    for(i in 1:length(housing_type)) {
+      check_class(housing_type, "character")
+      type <- switch(housing_type[i],
+                     "apartment" = 1,
+                     "condo" = 2,
+                     "cottage/cabin" = 3,
+                     "duplex" = 4,
+                     "flat" = 5,
+                     "house" = 6,
+                     "in-law" = 7,
+                     "loft" = 8,
+                     "townhouse" = 9,
+                     "manufactured" = 10,
+                     "assisted living" = 11,
+                     "land" = 12
+      )
+      queries <- c(queries, paste0("housing_type=", type))
+    }
   }
 
   # Add queries to url
