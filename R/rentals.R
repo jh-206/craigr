@@ -22,9 +22,9 @@
 #' @param search_distance Optional numeric supplying a distance from the
 #' specified postal code.
 #' @param postal Optional numeric postal code specifying an area to search in.
-#' @param bedrooms Optional character vector specifying the desired number of
+#' @param bedrooms Optional numeric vector specifying the desired number of
 #' bedrooms.
-#' @param bathrooms Optional character vector specifying the desired number of
+#' @param bathrooms Optional numeric vector specifying the desired number of
 #' bathrooms.
 #' @param min_price Optional numeric containing minimum price.
 #' @param max_price Optional numeric containing maximum price.
@@ -38,7 +38,7 @@
 #' is \code{FALSE}.
 #' @param pets_dog Logical specifying whether apartment must allow dogs. Default
 #' is \code{FALSE}.
-#' @param housing_type Character specifying housing type for search results. Includes house, apartment, condo. See craigslist for full list of housing types.
+#' @param housing_type Character vector specifying housing type for search results. Includes house, apartment, condo. See craigslist for full list of housing types.
 #' @param ... Additional arguments.
 #'
 #' @examples

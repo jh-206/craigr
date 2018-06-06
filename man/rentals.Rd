@@ -40,10 +40,10 @@ to craiglist.}
 \item{search_distance}{Optional numeric supplying a distance from the
 specified postal code.}
 
-\item{bedrooms}{Optional character vector specifying the desired number of
+\item{bedrooms}{Optional numeric vector specifying the desired number of
 bedrooms.}
 
-\item{bathrooms}{Optional character vector specifying the desired number of
+\item{bathrooms}{Optional numeric vector specifying the desired number of
 bathrooms.}
 
 \item{min_price}{Optional numeric containing minimum price.}
@@ -66,7 +66,7 @@ is \code{FALSE}.}
 \item{pets_dog}{Logical specifying whether apartment must allow dogs. Default
 is \code{FALSE}.}
 
-\item{housing_type}{Character specifying housing type for search results. Includes house, apartment, condo. See craigslist for full list of housing types.}
+\item{housing_type}{Character vector specifying housing type for search results. Includes house, apartment, condo. See craigslist for full list of housing types.}
 
 \item{...}{Additional arguments.}
 }
