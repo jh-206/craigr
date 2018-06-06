@@ -38,6 +38,7 @@
 #' is \code{FALSE}.
 #' @param pets_dog Logical specifying whether apartment must allow dogs. Default
 #' is \code{FALSE}.
+#' @param housing_type Character specifying housing type for search results. Includes house, apartment, condo. See craigslist for full list of housing types.
 #' @param ... Additional arguments.
 #'
 #' @examples
@@ -52,7 +53,7 @@ rentals <- function(location = "seattle", area = "all", base_url = NULL,
                     search_distance = NULL, bedrooms = NULL, bathrooms = NULL,
                     min_price = NULL, max_price = NULL, min_sqft = NULL,
                     max_sqft = NULL, has_pic = FALSE, posted_today = FALSE,
-                    pets_cat = FALSE, pets_dog = FALSE, ...)
+                    pets_cat = FALSE, pets_dog = FALSE, housing_type = NULL, ...)
 {
   ## Preliminary input checks -----
   # Generate the base url based on specified location and area and make sure
@@ -126,6 +127,26 @@ rentals <- function(location = "seattle", area = "all", base_url = NULL,
   }
   if(pets_dog){
     queries <- c(queries, "pets_dog=1")
+  }
+  if(!(missing(housing_type))){
+    for(i in 1:length(housing_type)) {
+      check_class(housing_type, "character")
+      type <- switch(housing_type[i],
+                     "apartment" = 1,
+                     "condo" = 2,
+                     "cottage/cabin" = 3,
+                     "duplex" = 4,
+                     "flat" = 5,
+                     "house" = 6,
+                     "in-law" = 7,
+                     "loft" = 8,
+                     "townhouse" = 9,
+                     "manufactured" = 10,
+                     "assisted living" = 11,
+                     "land" = 12
+      )
+      queries <- c(queries, paste0("housing_type=", type))
+    }
   }
 
   # Add queries to url
