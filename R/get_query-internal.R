@@ -14,7 +14,7 @@
 #' @keywords internal
 #' @export
 #'
-get_query <- function(query, type = "apa", get_address = F)
+get_query <- function(query, type = "apa", get_address = F, get_xy = F)
 {
   ## The raw query
   raw_query <- xml2::read_html(query)
@@ -25,7 +25,7 @@ get_query <- function(query, type = "apa", get_address = F)
   ## Create data vectors
   create_vector(env = environment(),
                 c("titles", "prices", "dates", "urls", "locales", "beds",
-                  "sqfts", "addresses"))
+                  "sqfts", "addresses", "lats", "lons"))
 
 
   ## Loop through to make sure no data is missing
@@ -93,6 +93,20 @@ get_query <- function(query, type = "apa", get_address = F)
       })
       addresses <- c(addresses, address)
     }
+    # Obtain Lat/Lon if specified in function args (returns NA if an error is generated)
+    if(get_xy){
+      if(!exists('link')){link <- xml2::read_html(url)}
+      temp <- link %>% rvest::html_node("#map")
+      lat <- na_error({
+        xml2::xml_attrs(temp)[['data-latitude']]
+      })
+      lon <- na_error({
+        xml2::xml_attrs(temp)[['data-longitude']]
+      })
+      lats <- c(lats, lat)
+      lons <- c(lons, lon)
+      rm(link)
+    }
 
     ## Populate data vectors
     titles  <- c(titles,  title)
@@ -119,6 +133,10 @@ get_query <- function(query, type = "apa", get_address = F)
 
   if(get_address) {
     clean_data$Address <- addresses
+  }
+  if(get_xy) {
+    clean_data$Lat <- lats
+    clean_data$Lon <- lons
   }
 
   return(clean_data)
