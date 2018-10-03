@@ -139,8 +139,8 @@ get_query <- function(query, type = "apa", get_address = F, get_xy = F)
     clean_data$Address <- addresses
   }
   if(get_xy) {
-    clean_data$Lat <- lats
-    clean_data$Lon <- lons
+    clean_data$Lat <- as.numeric(lats)
+    clean_data$Lon <- as.numeric(lons)
     clean_data$XYAccruracy <- xy_accrs
   }
 
