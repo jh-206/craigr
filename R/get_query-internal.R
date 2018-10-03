@@ -25,7 +25,7 @@ get_query <- function(query, type = "apa", get_address = F, get_xy = F)
   ## Create data vectors
   create_vector(env = environment(),
                 c("titles", "prices", "dates", "urls", "locales", "beds",
-                  "sqfts", "addresses", "lats", "lons"))
+                  "sqfts", "addresses", "lats", "lons", "xy_accrs"))
 
 
   ## Loop through to make sure no data is missing
@@ -103,6 +103,10 @@ get_query <- function(query, type = "apa", get_address = F, get_xy = F)
       lon <- na_error({
         xml2::xml_attrs(temp)[['data-longitude']]
       })
+      xy_accr <- na_error({
+        xml2::xml_attrs(temp)[['data-accuracy']]
+      })
+      xy_accrs <- c(xy_accrs, xy_accr)
       lats <- c(lats, lat)
       lons <- c(lons, lon)
       rm(link)
@@ -137,6 +141,7 @@ get_query <- function(query, type = "apa", get_address = F, get_xy = F)
   if(get_xy) {
     clean_data$Lat <- lats
     clean_data$Lon <- lons
+    clean_data$XYAccruracy <- xy_accrs
   }
 
   return(clean_data)
