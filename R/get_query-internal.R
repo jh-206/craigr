@@ -7,6 +7,8 @@
 #' only apartment searches are available.  Default is \code{apa} for "apartment".
 #' @param get_address Logical specifying whether to extract address from posting.
 #' Requires reading html of post URL. Default is \code{FALSE}
+#' @param get_xy Logical specifying whether to extract latitude and longitude from posting.
+#' Requires reading html of post URL. Default is \code{FALSE}. Includes field on lat/lon accuracy
 #'
 #' @return
 #'
@@ -141,7 +143,7 @@ get_query <- function(query, type = "apa", get_address = F, get_xy = F)
   if(get_xy) {
     clean_data$Lat <- as.numeric(lats)
     clean_data$Lon <- as.numeric(lons)
-    clean_data$XYAccruracy <- xy_accrs
+    clean_data$XYAccuracy <- xy_accrs
   }
 
   return(clean_data)
